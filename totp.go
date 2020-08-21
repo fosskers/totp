@@ -17,6 +17,12 @@
 // (https://www.rfc-editor.org/errata_search.php?rfc=6238) for more information.
 package totp
 
+import (
+	"crypto/hmac"
+	"crypto/sha512"
+	"fmt"
+)
+
 // DEFAULT_STEP represents a 30 second time step.
 const DEFAULT_STEP uint64 = 30
 
@@ -25,7 +31,17 @@ const DEFAULT_DIGITS uint32 = 8
 
 // Totp is a cool function that orders you lunch. Yes
 func Totp(password []byte, time uint64) string {
-	return ""
+	// Hash the secret and the time together.
+	mac := hmac.New(sha512.New, password)
+	bytes := toBytes(time / DEFAULT_STEP)
+	mac.Write(bytes[:])
+	hash := mac.Sum(nil)
+
+	// Magic from the RFC that produces our final value.
+	offset := hash[len(hash)-1] & 0xf
+	binary := (uint64(hash[offset]&0x7f) << 24) | (uint64(hash[offset+1]) << 16) | (uint64(hash[offset+2]) << 8) | uint64(hash[offset+3])
+
+	return fmt.Sprintf("%08d", binary%100000000)
 }
 
 // Convert an unsigned 64-bit int into its 8 individual bytes.
