@@ -1,6 +1,7 @@
 package totp
 
 import (
+	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
 	"fmt"
@@ -27,6 +28,20 @@ func testTotp(t *testing.T, h func() hash.Hash, secret []byte, time uint64, expe
 	if hash != expected {
 		t.Errorf("Totp: expected %s, got %s", expected, hash)
 	}
+}
+
+func TestTotp1(t *testing.T) {
+	secret := []byte("12345678901234567890")
+	if len(secret) != 20 {
+		t.Errorf("Byte Conversion: expected 20, got %d", len(secret))
+	}
+
+	testTotp(t, sha1.New, secret, 59, "94287082")
+	testTotp(t, sha1.New, secret, 1111111109, "07081804")
+	testTotp(t, sha1.New, secret, 1111111111, "14050471")
+	testTotp(t, sha1.New, secret, 1234567890, "89005924")
+	testTotp(t, sha1.New, secret, 2000000000, "69279037")
+	testTotp(t, sha1.New, secret, 20000000000, "65353130")
 }
 
 func TestTotp256(t *testing.T) {
