@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"hash"
 	"testing"
+	"time"
 )
 
 // --- Unit Tests --- //
@@ -74,7 +75,19 @@ func TestTotp512(t *testing.T) {
 
 // --- Documentation Examples --- //
 
-// TODO
 func ExampleTotp() {
-	fmt.Println("foobar")
+	password := []byte("secret")
+	seconds := uint64(time.Now().Unix())
+	totp := Totp(sha512.New, password, seconds)
+	fmt.Println(totp)
+}
+
+// This example uses a step size of 15 seconds (i.e. the password would expire
+// faster) and a digit count of 6. Consider DEFAULT_STEP and DEFAULT_DIGITS if
+// you only need to alter one of the arguments.
+func ExampleTotpCustom() {
+	password := []byte("secret")
+	seconds := uint64(time.Now().Unix())
+	totp := TotpCustom(sha512.New, 15, 6, password, seconds)
+	fmt.Println(totp)
 }

@@ -7,9 +7,18 @@
 //
 // Usage
 //
-// Here is an example:
+// The Totp function is likely what you need. It uses the default time step of
+// 30 seconds and gives 8 digits of output:
 //
-//   Totp("whatever", 6)
+//   // Negotiated between you and the authenticating service.
+//   password := []byte("secret")
+//
+//   // The number of seconds since the Unix Epoch.
+//   seconds := uint64(time.Now().Unix())
+//
+//   // Specify the desired Hash algorithm from the Standard Library.
+//   // For TOTP, sha1 and sha256 are also valid.
+//   totp := Totp(sha512.New, password, seconds)
 //
 // Resources
 //
@@ -30,8 +39,6 @@ const DEFAULT_STEP uint64 = 30
 const DEFAULT_DIGITS uint32 = 8
 
 // Totp produces a Time-based One-time Password with default settings.
-//
-// mac := hmac.New(sha512.New, password)
 func Totp(h func() hash.Hash, password []byte, time uint64) string {
 	return TotpCustom(h, DEFAULT_STEP, DEFAULT_DIGITS, password, time)
 }
