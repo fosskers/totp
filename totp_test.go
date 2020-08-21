@@ -1,6 +1,9 @@
 package totp
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestToBytes(t *testing.T) {
 	expected := [8]byte{0, 0, 0, 0, 0, 0, 0, 1}
@@ -20,4 +23,9 @@ func TestToBytes(t *testing.T) {
 	if result != expected {
 		t.Errorf("toBytes: expected ?, got ?")
 	}
+}
+
+// TODO
+func ExampleTotp() {
+	fmt.Println("foobar")
 }
