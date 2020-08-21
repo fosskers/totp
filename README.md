@@ -1,5 +1,6 @@
 [![Workflow Status](https://github.com/fosskers/totp/workflows/Go/badge.svg)](https://github.com/fosskers/totp/actions?query=workflow%3A%22Go%22)
 [![Go Report Card](https://goreportcard.com/badge/github.com/fosskers/totp)](https://goreportcard.com/report/github.com/fosskers/totp)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/fosskers/totp)](https://pkg.go.dev/github.com/fosskers/totp)
 
 # totp
 
