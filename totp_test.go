@@ -73,6 +73,19 @@ func TestTotp512(t *testing.T) {
 	testTotp(t, sha512.New, secret, 20000000000, "47863826")
 }
 
+func TestVariableLength(t *testing.T) {
+	secret := []byte("12345678901234567890123456789012")
+	hash := TotpCustom(sha256.New, DEFAULT_STEP, 10, secret, 100)
+	if hash != "2102975832" {
+		t.Errorf("Expected 10 digits, got the hash: %s", hash)
+	}
+
+	hash = TotpCustom(sha256.New, DEFAULT_STEP, 6, secret, 100)
+	if hash != "975832" {
+		t.Errorf("Expected 6 digits, got the hash: %s", hash)
+	}
+}
+
 // --- Documentation Examples --- //
 
 func ExampleTotp() {
