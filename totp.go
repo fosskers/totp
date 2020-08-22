@@ -56,7 +56,7 @@ func TotpCustom(h func() hash.Hash, step uint64, digits uint32, password []byte,
 	offset := hash[len(hash)-1] & 0xf
 	binary := (uint64(hash[offset]&0x7f) << 24) | (uint64(hash[offset+1]) << 16) | (uint64(hash[offset+2]) << 8) | uint64(hash[offset+3])
 
-	return fmt.Sprintf("%0[2]*[1]d", binary%100000000, digits)
+	return fmt.Sprintf("%0[2]*[1]d", binary%intPow10(uint64(digits)), digits)
 }
 
 // Convert an unsigned 64-bit int into its 8 individual bytes.
@@ -69,4 +69,17 @@ func toBytes(n uint64) [8]byte {
 	}
 
 	return bytes
+}
+
+// intPow10 is similar to `Pow`, but operates strictly with integers.
+func intPow10(power uint64) uint64 {
+	if power == 0 {
+		return 1
+	}
+
+	var result uint64 = 10
+	for i := power; i > 1; i-- {
+		result *= 10
+	}
+	return result
 }
